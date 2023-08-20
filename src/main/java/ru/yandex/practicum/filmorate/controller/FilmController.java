@@ -22,14 +22,14 @@ public class FilmController {
     private int filmId = 0;
 
     @GetMapping
-    public List<Film> getFilmStorage(){
+    public List<Film> getFilmStorage() {
         return new ArrayList<>(filmStorage.values());
     }
 
     @PostMapping
-    public Film addFilm(@RequestBody Film film){
+    public Film addFilm(@RequestBody Film film) {
         validationCheck(film);
-        if (filmStorage.containsKey(film.getId())){
+        if (filmStorage.containsKey(film.getId())) {
             String message = "error, the film already exists";
             log.error(message);
             throw new FilmAlreadyExistException(message);
@@ -43,9 +43,9 @@ public class FilmController {
     }
 
     @PutMapping
-    public Film updateFilm(@RequestBody Film film){
+    public Film updateFilm(@RequestBody Film film) {
         validationCheck(film);
-        if (filmStorage.containsKey(film.getId())){
+        if (filmStorage.containsKey(film.getId())) {
             filmStorage.put(film.getId(), film);
             log.info("Обновление фильма с id '{}' успешно произведена", film.getId());
         } else {
@@ -57,28 +57,28 @@ public class FilmController {
         return film;
     }
 
-    private void validationCheck(Film film){
-        if (film == null){
+    private void validationCheck(Film film) {
+        if (film == null) {
             String message = "error, null was provided";
             log.error(message);
             throw new FilmValidationException(message);
         }
-        if (film.getName() == null || film.getName().equals("")){
+        if (film.getName() == null || film.getName().equals("")) {
             String message = "bad name was provided";
             log.error(message);
             throw new FilmValidationException(message);
         }
-        if (film.getDescription().length() > 200){
+        if (film.getDescription().length() > 200) {
             String message = "too long description. it should be less or equals 200 letters";
             log.error(message);
             throw new FilmValidationException(message);
         }
-        if (film.getReleaseDate().isBefore(FIRST_FILM_DATE)){
+        if (film.getReleaseDate().isBefore(FIRST_FILM_DATE)) {
             String message = "bad release date";
             log.error(message);
             throw new FilmValidationException(message);
         }
-        if (film.getDuration() <= 0){
+        if (film.getDuration() <= 0) {
             String message = "bad duration";
             log.error(message);
             throw new FilmValidationException(message);

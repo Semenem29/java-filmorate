@@ -21,23 +21,23 @@ public class UserController {
     private int userId = 1;
 
     @GetMapping
-    public List<User> getUsers(){
+    public List<User> getUsers() {
         return new ArrayList<>(userStorage.values());
     }
 
     @PostMapping
-    public User createUser(@RequestBody User user){
+    public User createUser(@RequestBody User user) {
         validationCheck(user);
-        if (user.getId() == null){
+        if (user.getId() == null) {
             user.setId(userId++);
         }
-        if (userStorage.containsKey(user.getId())){
+        if (userStorage.containsKey(user.getId())) {
             String message = "error, the user already exists";
             log.error(message);
             throw new UserAlreadyExistException(message);
         }
 
-       if (user.getName() == null || user.getName().isBlank()){
+        if (user.getName() == null || user.getName().isBlank()) {
             user.setName(user.getLogin());
         }
 
@@ -48,12 +48,12 @@ public class UserController {
     }
 
     @PutMapping
-    public User updateUser(@RequestBody User user){
+    public User updateUser(@RequestBody User user) {
         validationCheck(user);
-        if (user.getName().isBlank() || user.getName() == null || user.getName().equals("")){
+        if (user.getName().isBlank() || user.getName() == null || user.getName().equals("")) {
             user.setName(user.getLogin());
         }
-        if (userStorage.containsKey(user.getId())){
+        if (userStorage.containsKey(user.getId())) {
             userStorage.put(user.getId(), user);
             log.info("Обновление пользователя с id '{}' успешно произведена", user.getId());
         } else {
@@ -65,18 +65,18 @@ public class UserController {
         return user;
     }
 
-    private void validationCheck(User user){
-        if (user.getEmail().isBlank() || !user.getEmail().contains("@")){
+    private void validationCheck(User user) {
+        if (user.getEmail().isBlank() || !user.getEmail().contains("@")) {
             String message = "bad email";
             log.error(message);
             throw new UserValidationException(message);
         }
-        if (user.getLogin().equals("") || user.getLogin().contains(" ")){
+        if (user.getLogin().equals("") || user.getLogin().contains(" ")) {
             String message = "bad login";
             log.error(message);
-            throw  new UserValidationException(message);
+            throw new UserValidationException(message);
         }
-        if (user.getBirthday().isAfter(LocalDate.now())){
+        if (user.getBirthday().isAfter(LocalDate.now())) {
             String message = "bad birthday";
             log.error(message);
             throw new UserValidationException(message);
