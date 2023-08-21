@@ -35,7 +35,7 @@ public class FilmController {
             throw new FilmAlreadyExistException(message);
         }
 
-        film.setId(++filmId);
+        film.setId(generateId());
         filmStorage.put(film.getId(), film);
         String message = String.format("Добавлен новый фильм, количество фильмов в хранилище %s", filmStorage.size());
         log.info(message);
@@ -57,13 +57,17 @@ public class FilmController {
         return film;
     }
 
+    private int generateId() {
+        return ++filmId;
+    }
+
     private void validationCheck(Film film) {
         if (film == null) {
             String message = "error, null was provided";
             log.error(message);
             throw new FilmValidationException(message);
         }
-        if (film.getName() == null || film.getName().equals("")) {
+        if (film.getName() == null || film.getName().equals("") || film.getName().isBlank()) {
             String message = "bad name was provided";
             log.error(message);
             throw new FilmValidationException(message);

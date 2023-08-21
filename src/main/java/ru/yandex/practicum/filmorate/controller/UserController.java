@@ -18,7 +18,7 @@ import java.util.Map;
 @RequestMapping("/users")
 public class UserController {
     private Map<Integer, User> userStorage = new HashMap<>();
-    private int userId = 1;
+    private int userId = 0;
 
     @GetMapping
     public List<User> getUsers() {
@@ -29,7 +29,7 @@ public class UserController {
     public User createUser(@RequestBody User user) {
         validationCheck(user);
         if (user.getId() == null) {
-            user.setId(userId++);
+            user.setId(generateId());
         }
         if (userStorage.containsKey(user.getId())) {
             String message = "error, the user already exists";
@@ -63,6 +63,10 @@ public class UserController {
         }
 
         return user;
+    }
+
+    private int generateId() {
+        return ++userId;
     }
 
     private void validationCheck(User user) {
