@@ -8,20 +8,18 @@ import ru.yandex.practicum.filmorate.exception.UserValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Component
 @Slf4j
-public class InMemoryUserStorage implements UserStorage{
+public class InMemoryUserStorage implements UserStorage {
     private Map<Integer, User> userStorage = new HashMap<>();
     private int userId = 0;
 
     @Override
-    public List<User> getUsers() {
-        return new ArrayList<>(userStorage.values());
+    public Map<Integer, User> getUsers() {
+        return userStorage;
     }
 
     @Override

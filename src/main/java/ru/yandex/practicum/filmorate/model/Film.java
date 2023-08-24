@@ -15,9 +15,21 @@ public class Film {
     private LocalDate releaseDate;
     private int duration;
     private Set<Integer> fans;
-    private int rate;
+    private Integer rate;
 
-    public static int compare(Film f1, Film f2){
-        return Integer.compare(f1.getFans().size(), f2.getFans().size());
+    public static int compare(Film f1, Film f2) {
+        if (f2.getRate() != null) {
+            if (f1.getRate() != null) {
+                if (!f2.getRate().equals(f1.getRate())) {
+                    return f2.getRate() - f1.getRate();
+                }
+            } else {
+                return 1;
+            }
+        } else if (f1.getRate() != null) {
+            return -1;
+        }
+        return f2.getId() - f1.getId();
     }
 }
+

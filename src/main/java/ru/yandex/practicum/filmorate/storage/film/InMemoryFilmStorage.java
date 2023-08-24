@@ -8,21 +8,19 @@ import ru.yandex.practicum.filmorate.exception.FilmValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Component
 @Slf4j
-public class InMemoryFilmStorage implements FilmStorage{
+public class InMemoryFilmStorage implements FilmStorage {
     private Map<Integer, Film> filmStorage = new HashMap<>();
     private static final LocalDate FIRST_FILM_DATE = LocalDate.of(1895, 12, 28);
     private int filmId = 0;
 
     @Override
-    public List<Film> getFilmStorage() {
-        return new ArrayList<>(filmStorage.values());
+    public Map<Integer, Film> getFilmStorage() {
+        return filmStorage;
     }
 
     @Override

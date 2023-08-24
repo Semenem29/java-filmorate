@@ -13,8 +13,7 @@ import ru.yandex.practicum.filmorate.storage.user.InMemoryUserStorage;
 
 import java.time.LocalDate;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 public class UserControllerTest {
@@ -168,5 +167,45 @@ public class UserControllerTest {
                 () -> controller.updateUser(notExistedUser));
         assertEquals("error, the user doesn't exist", exception.getMessage());
         assertEquals(2, controller.getUsers().size());
+    }
+
+    @Test
+    void addingToFriends() {
+        User user = User.builder()
+                .email("zachbraff@scrubs.com")
+                .login("jd29")
+                .name("John")
+                .birthday(LocalDate.of(1975, 4, 6))
+                .build();
+        controller.createUser(user);
+
+        User user2 = User.builder()
+                .email("donaldfaison@scrubs.com")
+                .login("chocolatebear69")
+                .name("Turk")
+                .birthday(LocalDate.of(1974, 6, 22))
+                .build();
+        controller.createUser(user2);
+        controller.addFriend(user.getId(), user2.getId());
+        assertTrue(user2.getFriends().contains(1));
+        assertTrue(user.getFriends().contains(2));
+        assertEquals(1, user.getFriends().size());
+
+        User user3 = User.builder()
+                .email("sarahchalke@scrubs.com")
+                .login("flatazz")
+                .name("Elliot")
+                .birthday(LocalDate.of(1976, 8, 27))
+                .build();
+        controller.createUser(user3);
+        controller.addFriend(user.getId(), user3.getId());
+        assertTrue(user3.getFriends().contains(1));
+        assertTrue(user.getFriends().contains(3));
+        assertEquals(2, user.getFriends().size());
+
+        controller.removeFriend(user.getId(), user2.getId());
+        assertFalse(user2.getFriends().contains(1));
+        assertFalse(user.getFriends().contains(2));
+        assertEquals(1, user.getFriends().size());
     }
 }
