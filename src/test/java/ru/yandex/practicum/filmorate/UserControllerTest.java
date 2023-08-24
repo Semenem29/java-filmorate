@@ -8,6 +8,8 @@ import ru.yandex.practicum.filmorate.exception.UserAlreadyExistException;
 import ru.yandex.practicum.filmorate.exception.UserNotExistException;
 import ru.yandex.practicum.filmorate.exception.UserValidationException;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.service.UserService;
+import ru.yandex.practicum.filmorate.storage.user.InMemoryUserStorage;
 
 import java.time.LocalDate;
 
@@ -20,7 +22,7 @@ public class UserControllerTest {
 
     @BeforeEach
     public void createController() {
-        controller = new UserController();
+        controller = new UserController(new UserService(new InMemoryUserStorage()));
     }
 
     @Test
