@@ -8,25 +8,25 @@ import ru.yandex.practicum.filmorate.exception.UserNotExistException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
-import ru.yandex.practicum.filmorate.storage.user.UserStorage;
+import ru.yandex.practicum.filmorate.storage.Storage;
+
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 public class FilmService {
-    private FilmStorage filmStorage;
-    private UserStorage userStorage;
+    private Storage<Film> filmStorage;
+    private Storage<User> userStorage;
 
     @Autowired
-    public FilmService(FilmStorage filmStorage, UserStorage userStorage) {
+    public FilmService(Storage<Film> filmStorage, Storage<User> userStorage) {
         this.filmStorage = filmStorage;
         this.userStorage = userStorage;
     }
 
     public Map<Integer, Film> getFilmStorage() {
-        return filmStorage.getFilmStorage();
+        return filmStorage.getStorage();
     }
 
     public Set<Integer> addLike(Integer filmId, Integer userId) {
@@ -34,12 +34,12 @@ public class FilmService {
             throw new ValidationException("filmId and/or userId cannot be null");
         }
 
-        Film film = filmStorage.getFilmStorage().get(filmId);
+        Film film = filmStorage.getStorage().get(filmId);
         if (film == null) {
             throw new FilmNotExistException("film is not exist");
         }
 
-        User user = userStorage.getUsers().get(userId);
+        User user = userStorage.getStorage().get(userId);
         if (user == null) {
             throw new UserNotExistException("user is not exist");
         }
@@ -64,12 +64,12 @@ public class FilmService {
             throw new ValidationException("filmId and/or userId cannot be null");
         }
 
-        Film film = filmStorage.getFilmStorage().get(filmId);
+        Film film = filmStorage.getStorage().get(filmId);
         if (film == null) {
             throw new FilmNotExistException("film is not exist");
         }
 
-        User user = userStorage.getUsers().get(userId);
+        User user = userStorage.getStorage().get(userId);
         if (user == null) {
             throw new UserNotExistException("user is not exist");
         }
@@ -85,7 +85,7 @@ public class FilmService {
         if (count <= 0) {
             throw new FilmValidationException("count of film cannot be less or equal to zero");
         }
-        return filmStorage.getFilmStorage().values().stream()
+        return filmStorage.getStorage().values().stream()
                 .sorted(Film::compare)
                 .limit(count)
                 .collect(Collectors.toList());
@@ -105,11 +105,11 @@ public class FilmService {
     }
 
     public Film createFilm(Film film) {
-        return filmStorage.createFilm(film);
+        return filmStorage.create(film);
     }
 
     public Film updateFilm(Film film) {
-        return filmStorage.updateFilm(film);
+        return filmStorage.update(film);
     }
 }
 

@@ -4,9 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.UserNotExistException;
 import ru.yandex.practicum.filmorate.exception.UserValidationException;
-import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.storage.user.UserStorage;
+import ru.yandex.practicum.filmorate.storage.Storage;
+
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -14,10 +14,10 @@ import java.util.stream.Collectors;
 @Service
 public class UserService {
 
-    private UserStorage userStorage;
+    private Storage<User> userStorage;
 
     @Autowired
-    public UserService(UserStorage userStorage) {
+    public UserService(Storage<User> userStorage) {
         this.userStorage = userStorage;
     }
 
@@ -30,8 +30,8 @@ public class UserService {
             throw new UserValidationException("same ids was provided");
         }
 
-        User user = userStorage.getUsers().get(userId);
-        User friend = userStorage.getUsers().get(friendId);
+        User user = userStorage.getStorage().get(userId);
+        User friend = userStorage.getStorage().get(friendId);
         if (user == null || friend == null) {
             throw new UserNotExistException("user or friend was not found");
         }
@@ -58,8 +58,8 @@ public class UserService {
             throw new UserValidationException("same ids was provided");
         }
 
-        User user = userStorage.getUsers().get(userId);
-        User friend = userStorage.getUsers().get(friendId);
+        User user = userStorage.getStorage().get(userId);
+        User friend = userStorage.getStorage().get(friendId);
         if (user == null || friend == null) {
             throw new UserNotExistException("user or friend was not found");
         }
@@ -100,7 +100,7 @@ public class UserService {
         if (userId == null) {
             throw new UserNotExistException("userId can not be null");
         }
-        User user = userStorage.getUsers().get(userId);
+        User user = userStorage.getStorage().get(userId);
         if (user == null) {
             throw new UserNotExistException("user was not found");
         }
@@ -110,7 +110,7 @@ public class UserService {
         }
 
         return user.getFriends().stream()
-                .map(id -> userStorage.getUsers().get(id))
+                .map(id -> userStorage.getStorage().get(id))
                 .collect(Collectors.toList());
     }
 
@@ -127,14 +127,14 @@ public class UserService {
     }
 
     public Map<Integer, User> getUsers() {
-        return userStorage.getUsers();
+        return userStorage.getStorage();
     }
 
     public User create(User user) {
-        return userStorage.createUser(user);
+        return userStorage.create(user);
     }
 
     public User update(User user) {
-        return userStorage.updateUser(user);
+        return userStorage.update(user);
     }
 }

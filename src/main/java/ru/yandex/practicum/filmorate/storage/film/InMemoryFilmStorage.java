@@ -6,6 +6,7 @@ import ru.yandex.practicum.filmorate.exception.FilmAlreadyExistException;
 import ru.yandex.practicum.filmorate.exception.FilmNotExistException;
 import ru.yandex.practicum.filmorate.exception.FilmValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.storage.Storage;
 
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -13,18 +14,18 @@ import java.util.Map;
 
 @Component
 @Slf4j
-public class InMemoryFilmStorage implements FilmStorage {
+public class InMemoryFilmStorage implements Storage<Film> {
     private Map<Integer, Film> filmStorage = new HashMap<>();
     private static final LocalDate FIRST_FILM_DATE = LocalDate.of(1895, 12, 28);
     private int filmId = 0;
 
     @Override
-    public Map<Integer, Film> getFilmStorage() {
+    public Map<Integer, Film> getStorage() {
         return filmStorage;
     }
 
     @Override
-    public Film createFilm(Film film) {
+    public Film create(Film film) {
         validationCheck(film);
         if (filmStorage.containsKey(film.getId())) {
             String message = "error, the film already exists";
@@ -40,7 +41,7 @@ public class InMemoryFilmStorage implements FilmStorage {
     }
 
     @Override
-    public Film updateFilm(Film film) {
+    public Film update(Film film) {
         validationCheck(film);
         if (filmStorage.containsKey(film.getId())) {
             filmStorage.put(film.getId(), film);

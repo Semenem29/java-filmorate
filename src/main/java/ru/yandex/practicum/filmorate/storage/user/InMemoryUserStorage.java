@@ -6,6 +6,7 @@ import ru.yandex.practicum.filmorate.exception.UserAlreadyExistException;
 import ru.yandex.practicum.filmorate.exception.UserNotExistException;
 import ru.yandex.practicum.filmorate.exception.UserValidationException;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.storage.Storage;
 
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -14,17 +15,17 @@ import java.util.Map;
 
 @Component
 @Slf4j
-public class InMemoryUserStorage implements UserStorage {
+public class InMemoryUserStorage implements Storage<User> {
     private Map<Integer, User> userStorage = new HashMap<>();
     private int userId = 0;
 
     @Override
-    public Map<Integer, User> getUsers() {
+    public Map<Integer, User> getStorage() {
         return userStorage;
     }
 
     @Override
-    public User createUser(User user) {
+    public User create(User user) {
         validationCheck(user);
         if (user.getId() == null) {
             user.setId(generateId());
@@ -50,7 +51,7 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     @Override
-    public User updateUser(User user) {
+    public User update(User user) {
         validationCheck(user);
         if (user.getName().isBlank() || user.getName() == null || user.getName().equals("")) {
             user.setName(user.getLogin());

@@ -7,7 +7,7 @@ import java.util.Map;
 public interface Storage<T> {
     public Map<Integer, T> getStorage();
 
-    public T createFilm(T unit);
+    public T create(T unit);
 
-    public T updateFilm(T unit);
+    public T update(T unit);
 }
