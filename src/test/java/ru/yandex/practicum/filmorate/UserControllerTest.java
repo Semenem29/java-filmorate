@@ -49,7 +49,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public void createExistedUser(){
+    public void createExistedUser() {
         User namelessUser = User.builder()
                 .name("")
                 .email("snowbaby357@gyandex.ru")
@@ -72,7 +72,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public void createNamelessUser(){
+    public void createNamelessUser() {
         User namelessUser = User.builder()
                 .name("")
                 .email("snowbaby357@gyandex.ru")
@@ -85,7 +85,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public void createFutureBirthdayUser(){
+    public void createFutureBirthdayUser() {
         User futureBirthdayUser = User.builder()
                 .name("Mike")
                 .email("mike777gyandex@.ru")
@@ -99,7 +99,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public void createSpacedLoginUser(){
+    public void createSpacedLoginUser() {
         User spacedLoginUser = User.builder()
                 .name("Mike")
                 .email("mike777gyandex@.ru")
@@ -113,7 +113,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public void createNoEmailUser(){
+    public void createNoEmailUser() {
         User emptyMailUser = User.builder()
                 .name("Mike")
                 .email("")
@@ -127,7 +127,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public void createWrongEmailUser(){
+    public void createWrongEmailUser() {
         User wrongMailUser = User.builder()
                 .name("Mike")
                 .email("mike777gyandex.ru")
@@ -141,7 +141,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public void createNoLoginUser(){
+    public void createNoLoginUser() {
         User emptyLoginUser = User.builder()
                 .name("Mike")
                 .email("mike777gyandex@.ru")
@@ -199,7 +199,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public void updateNotExistedUser(){
+    public void updateNotExistedUser() {
         User notExistedUser = User.builder()
                 .name("Noone")
                 .email("noonepetrovich@gyandex.ru")

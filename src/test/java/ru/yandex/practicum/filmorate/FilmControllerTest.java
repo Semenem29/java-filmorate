@@ -69,7 +69,7 @@ public class FilmControllerTest {
     }
 
     @Test
-    public void addFilmWithBlankName(){
+    public void addFilmWithBlankName() {
         Film blankNameFilm = Film.builder()
                 .name("")
                 .description("some description")
@@ -83,7 +83,7 @@ public class FilmControllerTest {
     }
 
     @Test
-    public void addTooLongDescriptionFilm(){
+    public void addTooLongDescriptionFilm() {
         Film longDescriptionFilm = Film.builder()
                 .name("Гарри Поттер")
                 .description("Жизнь десятилетнего Гарри Поттера нельзя назвать сладкой: родители умерли, " +
@@ -105,7 +105,7 @@ public class FilmControllerTest {
     }
 
     @Test
-    public void addTooEarlyReleaseDateFilm(){
+    public void addTooEarlyReleaseDateFilm() {
         Film earlyDateFilm = Film.builder()
                 .name("Пушкин")
                 .description("Запись рождения Сергеича")
@@ -119,7 +119,7 @@ public class FilmControllerTest {
     }
 
     @Test
-    public void addNegativeDurationFilm(){
+    public void addNegativeDurationFilm() {
         Film negativeFilm = Film.builder()
                 .name("Абсолютный ноль")
                 .description("Кто круче Кельвин или Цельсий?")
@@ -133,7 +133,7 @@ public class FilmControllerTest {
     }
 
     @Test
-    public void addExistedIdFilm(){
+    public void addExistedIdFilm() {
         Film film = Film.builder()
                 .name("Die Hard")
                 .description("40 Storeys High - with Suspense, Excitement and Adventure on every level!")
@@ -189,7 +189,7 @@ public class FilmControllerTest {
     }
 
     @Test
-    public void updateWithBlankNameFilm(){
+    public void updateWithBlankNameFilm() {
         Film film = Film.builder()
                 .name("Die Hard")
                 .description("40 Storeys High - with Suspense, Excitement and Adventure on every level!")
@@ -206,7 +206,7 @@ public class FilmControllerTest {
     }
 
     @Test
-    public void updateWithLongDescriptionFilm(){
+    public void updateWithLongDescriptionFilm() {
         Film film = Film.builder()
                 .name("Die Hard")
                 .description("40 Storeys High - with Suspense, Excitement and Adventure on every level!")
@@ -232,7 +232,7 @@ public class FilmControllerTest {
     }
 
     @Test
-    public void updateWithNegativeDurationFilm(){
+    public void updateWithNegativeDurationFilm() {
         Film film = Film.builder()
                 .name("Die Hard")
                 .description("40 Storeys High - with Suspense, Excitement and Adventure on every level!")
@@ -249,7 +249,7 @@ public class FilmControllerTest {
     }
 
     @Test
-    public void updateTooEarlyReleaseDateFilm(){
+    public void updateTooEarlyReleaseDateFilm() {
         Film film = Film.builder()
                 .name("Die Hard")
                 .description("40 Storeys High - with Suspense, Excitement and Adventure on every level!")
@@ -266,7 +266,7 @@ public class FilmControllerTest {
     }
 
     @Test
-    public void updateNotExistedFilm(){
+    public void updateNotExistedFilm() {
         Film film = Film.builder()
                 .name("Die Hard")
                 .description("40 Storeys High - with Suspense, Excitement and Adventure on every level!")
@@ -369,6 +369,5 @@ public class FilmControllerTest {
         assertEquals(2, filmController.getFilm(4).getFans().size());
         List<Film> list = filmController.getTopFilms(2);
         assertEquals(2, list.size());
-
     }
 }
