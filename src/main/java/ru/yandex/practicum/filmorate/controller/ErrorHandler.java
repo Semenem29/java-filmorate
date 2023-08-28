@@ -12,32 +12,14 @@ public class ErrorHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleUserValidationException(final UserValidationException e) {
-        return new ErrorResponse("user validation error", e.getMessage());
-    }
-
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleFilmValidationException(final FilmValidationException e) {
-        return new ErrorResponse("film validation error", e.getMessage());
+    public ErrorResponse handleUserValidationException(final ValidationException e) {
+        return new ErrorResponse("validation error", e.getMessage());
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponse handleEmptyObjectPassingError(final NullPointerException e) {
-        return new ErrorResponse("Передан пустой объект.");
-    }
-
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponse handleFilmNotExistException(final FilmNotExistException e) {
-        return new ErrorResponse("film is not exist");
-    }
-
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponse handleUserNotExistException(final UserNotExistException e) {
-        return new ErrorResponse("user is not exist");
+    public ErrorResponse handleFilmNotExistException(final NotExistException e) {
+        return new ErrorResponse("requested data is not exist");
     }
 
     @ExceptionHandler

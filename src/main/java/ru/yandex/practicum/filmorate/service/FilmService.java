@@ -3,7 +3,9 @@ package ru.yandex.practicum.filmorate.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.FilmNotExistException;
+import ru.yandex.practicum.filmorate.exception.FilmValidationException;
 import ru.yandex.practicum.filmorate.exception.UserNotExistException;
+import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
@@ -29,7 +31,7 @@ public class FilmService {
 
     public Set<Integer> addLike(Integer filmId, Integer userId) {
         if (filmId == null || userId == null) {
-            throw new NullPointerException();
+            throw new ValidationException("filmId and/or userId cannot be null");
         }
 
         Film film = filmStorage.getFilmStorage().get(filmId);
@@ -59,7 +61,7 @@ public class FilmService {
 
     public Set<Integer> removeLike(Integer filmId, Integer userId) {
         if (filmId == null || userId == null) {
-            throw new NullPointerException();
+            throw new ValidationException("filmId and/or userId cannot be null");
         }
 
         Film film = filmStorage.getFilmStorage().get(filmId);
@@ -80,6 +82,9 @@ public class FilmService {
     }
 
     public List<Film> getTop(Integer count) {
+        if (count <= 0) {
+            throw new FilmValidationException("count of film cannot be less or equal to zero");
+        }
         return filmStorage.getFilmStorage().values().stream()
                 .sorted(Film::compare)
                 .limit(count)
@@ -88,7 +93,7 @@ public class FilmService {
 
     public Film getFilm(Integer id) {
         if (id == null) {
-            throw new NullPointerException();
+            throw new FilmValidationException("filmId cannot be null");
         }
 
         if (id <= 0 || getFilmStorage().containsKey(id)) {

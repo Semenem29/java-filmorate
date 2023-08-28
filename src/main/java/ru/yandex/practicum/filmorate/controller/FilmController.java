@@ -56,9 +56,6 @@ public class FilmController {
 
     @GetMapping("/popular")
     public List<Film> getTopFilms(@RequestParam(defaultValue = NUMBER_OF_FILMS_IN_TOP_BY_DEFAULT) Integer count) {
-        if (count <= 0) {
-            count = Integer.parseInt(NUMBER_OF_FILMS_IN_TOP_BY_DEFAULT);
-        }
         return filmService.getTop(count);
     }
 }

@@ -178,6 +178,7 @@ public class UserControllerTest {
                 .birthday(LocalDate.of(1975, 4, 6))
                 .build();
         controller.createUser(user);
+        assertEquals(0, user.getFriends().size());
 
         User user2 = User.builder()
                 .email("donaldfaison@scrubs.com")

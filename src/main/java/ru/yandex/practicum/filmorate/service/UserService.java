@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.UserNotExistException;
 import ru.yandex.practicum.filmorate.exception.UserValidationException;
+import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
@@ -22,7 +23,7 @@ public class UserService {
 
     public Set<Integer> addFriend(Integer userId, Integer friendId) {
         if (userId == null || friendId == null) {
-            throw new NullPointerException();
+            throw new UserValidationException("friendId and/or userId cannot be null");
         }
 
         if (userId.equals(friendId)) {
@@ -50,7 +51,7 @@ public class UserService {
 
     public Set<Integer> removeFriend(Integer userId, Integer friendId) {
         if (userId == null || friendId == null) {
-            throw new NullPointerException();
+            throw new UserValidationException("friendId and/or userId cannot be null");
         }
 
         if (userId.equals(friendId)) {
@@ -71,7 +72,7 @@ public class UserService {
 
     public Set<User> getCommonFriends(Integer userId, Integer friendId) {
         if (userId == null || friendId == null) {
-            throw new NullPointerException();
+            throw new UserValidationException("friendId and/or userId cannot be null");
         }
 
         if (userId.equals(friendId)) {
