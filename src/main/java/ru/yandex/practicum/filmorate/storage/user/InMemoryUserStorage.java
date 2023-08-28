@@ -40,7 +40,7 @@ public class InMemoryUserStorage implements Storage<User> {
             user.setName(user.getLogin());
         }
 
-        if (user.getFriends() == null){
+        if (user.getFriends() == null) {
             user.setFriends(new HashSet<>());
         }
 

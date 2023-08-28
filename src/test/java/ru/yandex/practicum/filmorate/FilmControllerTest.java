@@ -13,10 +13,9 @@ import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.FilmService;
 import ru.yandex.practicum.filmorate.service.UserService;
 import ru.yandex.practicum.filmorate.storage.Storage;
-import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.film.InMemoryFilmStorage;
 import ru.yandex.practicum.filmorate.storage.user.InMemoryUserStorage;
-import ru.yandex.practicum.filmorate.storage.user.UserStorage;
+
 
 import java.time.LocalDate;
 import java.util.List;
@@ -67,7 +66,10 @@ public class FilmControllerTest {
         filmController.addFilm(film2);
         assertEquals(2, filmController.getFilmStorage().size());
         assertEquals(2, film2.getId());
+    }
 
+    @Test
+    public void addFilmWithBlankName(){
         Film blankNameFilm = Film.builder()
                 .name("")
                 .description("some description")
@@ -77,8 +79,11 @@ public class FilmControllerTest {
         FilmValidationException exception = assertThrows(FilmValidationException.class,
                 () -> filmController.addFilm(blankNameFilm));
         assertEquals("bad name was provided", exception.getMessage());
-        assertEquals(2, filmController.getFilmStorage().size());
+        assertEquals(0, filmController.getFilmStorage().size());
+    }
 
+    @Test
+    public void addTooLongDescriptionFilm(){
         Film longDescriptionFilm = Film.builder()
                 .name("Гарри Поттер")
                 .description("Жизнь десятилетнего Гарри Поттера нельзя назвать сладкой: родители умерли, " +
@@ -96,8 +101,11 @@ public class FilmControllerTest {
         FilmValidationException exception2 = assertThrows(FilmValidationException.class,
                 () -> filmController.addFilm(longDescriptionFilm));
         assertEquals("too long description. it should be less or equals 200 letters", exception2.getMessage());
-        assertEquals(2, filmController.getFilmStorage().size());
+        assertEquals(0, filmController.getFilmStorage().size());
+    }
 
+    @Test
+    public void addTooEarlyReleaseDateFilm(){
         Film earlyDateFilm = Film.builder()
                 .name("Пушкин")
                 .description("Запись рождения Сергеича")
@@ -107,8 +115,11 @@ public class FilmControllerTest {
         FilmValidationException exception3 = assertThrows(FilmValidationException.class,
                 () -> filmController.addFilm(earlyDateFilm));
         assertEquals("bad release date", exception3.getMessage());
-        assertEquals(2, filmController.getFilmStorage().size());
+        assertEquals(0, filmController.getFilmStorage().size());
+    }
 
+    @Test
+    public void addNegativeDurationFilm(){
         Film negativeFilm = Film.builder()
                 .name("Абсолютный ноль")
                 .description("Кто круче Кельвин или Цельсий?")
@@ -118,19 +129,30 @@ public class FilmControllerTest {
         FilmValidationException exception4 = assertThrows(FilmValidationException.class,
                 () -> filmController.addFilm(negativeFilm));
         assertEquals("bad duration", exception4.getMessage());
-        assertEquals(2, filmController.getFilmStorage().size());
+        assertEquals(0, filmController.getFilmStorage().size());
+    }
+
+    @Test
+    public void addExistedIdFilm(){
+        Film film = Film.builder()
+                .name("Die Hard")
+                .description("40 Storeys High - with Suspense, Excitement and Adventure on every level!")
+                .releaseDate(LocalDate.of(1988, 1, 1))
+                .duration(133)
+                .build();
+        filmController.addFilm(film);
 
         Film existedIdFilm = Film.builder()
                 .name("Die Die Haaaard")
                 .description("Another descrip")
-                .id(2)
+                .id(1)
                 .releaseDate(LocalDate.of(2025, 4, 6))
                 .duration(144)
                 .build();
         FilmAlreadyExistException exception5 = assertThrows(FilmAlreadyExistException.class,
                 () -> filmController.addFilm(existedIdFilm));
         assertEquals("error, the film already exists", exception5.getMessage());
-        assertEquals(2, filmController.getFilmStorage().size());
+        assertEquals(1, filmController.getFilmStorage().size());
     }
 
     @Test
@@ -164,15 +186,36 @@ public class FilmControllerTest {
         assertEquals(LocalDate.of(1991, 2, 3), filmController.getFilmStorage().get(1).getReleaseDate());
         assertEquals("Крепкий орешек 2", filmController.getFilmStorage().get(1).getName());
         assertEquals("Бла Бла БЛа, Брюс Уиллис всех победит", filmController.getFilmStorage().get(1).getDescription());
+    }
 
-        film2.setName("");
+    @Test
+    public void updateWithBlankNameFilm(){
+        Film film = Film.builder()
+                .name("Die Hard")
+                .description("40 Storeys High - with Suspense, Excitement and Adventure on every level!")
+                .releaseDate(LocalDate.of(1988, 1, 1))
+                .duration(133)
+                .build();
+        filmController.addFilm(film);
+
+        film.setName("");
         FilmValidationException exception = assertThrows(FilmValidationException.class,
-                () -> filmController.updateFilm(film2));
+                () -> filmController.updateFilm(film));
         assertEquals("bad name was provided", exception.getMessage());
-        assertEquals(2, filmController.getFilmStorage().size());
+        assertEquals(1, filmController.getFilmStorage().size());
+    }
 
-        film2.setName("Крепкий орешек 2");
-        film2.setDescription("Жизнь десятилетнего Гарри Поттера нельзя назвать сладкой: родители умерли, \" +\n" +
+    @Test
+    public void updateWithLongDescriptionFilm(){
+        Film film = Film.builder()
+                .name("Die Hard")
+                .description("40 Storeys High - with Suspense, Excitement and Adventure on every level!")
+                .releaseDate(LocalDate.of(1988, 1, 1))
+                .duration(133)
+                .build();
+        filmController.addFilm(film);
+
+        film.setDescription("Жизнь десятилетнего Гарри Поттера нельзя назвать сладкой: родители умерли, \" +\n" +
                 "                        \"едва ему исполнился год, а от дяди и тёти, взявших сироту на воспитание, \" +\n" +
                 "                        \"достаются лишь тычки да подзатыльники. Но в одиннадцатый день рождения \" +\n" +
                 "                        \"Гарри всё меняется. Странный гость, неожиданно появившийся на пороге, \" +\n" +
@@ -183,25 +226,60 @@ public class FilmControllerTest {
                 "                        \"ключ к разгадке тайны смерти его родителей.");
 
         FilmValidationException exception2 = assertThrows(FilmValidationException.class,
-                () -> filmController.updateFilm(film2));
+                () -> filmController.updateFilm(film));
         assertEquals("too long description. it should be less or equals 200 letters", exception2.getMessage());
-        assertEquals(2, filmController.getFilmStorage().size());
+        assertEquals(1, filmController.getFilmStorage().size());
+    }
 
-        film2.setDescription("Бла Бла БЛа, Брюс Уиллис всех победит");
-        film2.setReleaseDate(LocalDate.of(1799, 6, 6));
-        FilmValidationException exception3 = assertThrows(FilmValidationException.class,
-                () -> filmController.updateFilm(film2));
-        assertEquals("bad release date", exception3.getMessage());
-        assertEquals(2, filmController.getFilmStorage().size());
+    @Test
+    public void updateWithNegativeDurationFilm(){
+        Film film = Film.builder()
+                .name("Die Hard")
+                .description("40 Storeys High - with Suspense, Excitement and Adventure on every level!")
+                .releaseDate(LocalDate.of(1988, 1, 1))
+                .duration(133)
+                .build();
+        filmController.addFilm(film);
 
-        film2.setReleaseDate(LocalDate.of(1991, 2, 3));
-        film2.setDuration(-273);
+        film.setDuration(-273);
         FilmValidationException exception4 = assertThrows(FilmValidationException.class,
-                () -> filmController.updateFilm(film2));
+                () -> filmController.updateFilm(film));
         assertEquals("bad duration", exception4.getMessage());
-        assertEquals(2, filmController.getFilmStorage().size());
+        assertEquals(1, filmController.getFilmStorage().size());
+    }
 
-        film2.setDuration(120);
+    @Test
+    public void updateTooEarlyReleaseDateFilm(){
+        Film film = Film.builder()
+                .name("Die Hard")
+                .description("40 Storeys High - with Suspense, Excitement and Adventure on every level!")
+                .releaseDate(LocalDate.of(1988, 1, 1))
+                .duration(133)
+                .build();
+        filmController.addFilm(film);
+
+        film.setReleaseDate(LocalDate.of(1799, 6, 6));
+        FilmValidationException exception3 = assertThrows(FilmValidationException.class,
+                () -> filmController.updateFilm(film));
+        assertEquals("bad release date", exception3.getMessage());
+        assertEquals(1, filmController.getFilmStorage().size());
+    }
+
+    @Test
+    public void updateNotExistedFilm(){
+        Film film = Film.builder()
+                .name("Die Hard")
+                .description("40 Storeys High - with Suspense, Excitement and Adventure on every level!")
+                .releaseDate(LocalDate.of(1988, 1, 1))
+                .duration(133)
+                .build();
+        filmController.addFilm(film);
+
+        film.setReleaseDate(LocalDate.of(1799, 6, 6));
+        FilmValidationException exception3 = assertThrows(FilmValidationException.class,
+                () -> filmController.updateFilm(film));
+        assertEquals("bad release date", exception3.getMessage());
+        assertEquals(1, filmController.getFilmStorage().size());
 
         Film notExistedFilm = Film.builder()
                 .name("Die Hard 777")
@@ -213,8 +291,7 @@ public class FilmControllerTest {
         FilmNotExistException exception5 = assertThrows(FilmNotExistException.class,
                 () -> filmController.updateFilm(notExistedFilm));
         assertEquals("error, the film doesn't exist", exception5.getMessage());
-        assertEquals(2, filmController.getFilmStorage().size());
-
+        assertEquals(1, filmController.getFilmStorage().size());
     }
 
     @Test

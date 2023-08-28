@@ -7,7 +7,6 @@ import ru.yandex.practicum.filmorate.exception.UserValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.Storage;
 
-
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -30,8 +29,8 @@ public class UserService {
             throw new UserValidationException("same ids was provided");
         }
 
-        User user = userStorage.getStorage().get(userId);
-        User friend = userStorage.getStorage().get(friendId);
+        User user = getUsers().get(userId);
+        User friend = getUsers().get(friendId);
         if (user == null || friend == null) {
             throw new UserNotExistException("user or friend was not found");
         }
@@ -58,8 +57,8 @@ public class UserService {
             throw new UserValidationException("same ids was provided");
         }
 
-        User user = userStorage.getStorage().get(userId);
-        User friend = userStorage.getStorage().get(friendId);
+        User user = getUsers().get(userId);
+        User friend = getUsers().get(friendId);
         if (user == null || friend == null) {
             throw new UserNotExistException("user or friend was not found");
         }
@@ -81,6 +80,7 @@ public class UserService {
 
         User user = getUsers().get(userId);
         User friend = getUsers().get(friendId);
+
         if (user == null || friend == null) {
             throw new UserNotExistException("user or friend was not found");
         }
@@ -100,7 +100,7 @@ public class UserService {
         if (userId == null) {
             throw new UserNotExistException("userId can not be null");
         }
-        User user = userStorage.getStorage().get(userId);
+        User user = getUsers().get(userId);
         if (user == null) {
             throw new UserNotExistException("user was not found");
         }
@@ -110,7 +110,7 @@ public class UserService {
         }
 
         return user.getFriends().stream()
-                .map(id -> userStorage.getStorage().get(id))
+                .map(id -> getUsers().get(id))
                 .collect(Collectors.toList());
     }
 

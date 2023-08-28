@@ -46,51 +46,46 @@ public class UserControllerTest {
         controller.createUser(user2);
         assertEquals(2, controller.getUsers().size());
         assertEquals(2, user2.getId());
+    }
 
-        User emptyMailUser = User.builder()
-                .name("Mike")
-                .email("")
-                .login("Mike777")
-                .birthday(LocalDate.of(1977, 7, 7))
+    @Test
+    public void createExistedUser(){
+        User namelessUser = User.builder()
+                .name("")
+                .email("snowbaby357@gyandex.ru")
+                .login("snezhana257")
+                .birthday(LocalDate.of(1989, 7, 7))
                 .build();
-        UserValidationException exception = assertThrows(UserValidationException.class,
-                () -> controller.createUser(emptyMailUser));
-        assertEquals("bad email", exception.getMessage());
-        assertEquals(2, controller.getUsers().size());
+        controller.createUser(namelessUser);
 
-        User wrongMailUser = User.builder()
-                .name("Mike")
-                .email("mike777gyandex.ru")
-                .login("Mike777")
-                .birthday(LocalDate.of(1977, 7, 7))
+        User existedIdUser = User.builder()
+                .name("Snezhana")
+                .email("snowbaby357@gyandex.ru")
+                .id(1)
+                .login("snezhana257")
+                .birthday(LocalDate.of(1989, 7, 7))
                 .build();
-        UserValidationException exception2 = assertThrows(UserValidationException.class,
-                () -> controller.createUser(wrongMailUser));
-        assertEquals("bad email", exception2.getMessage());
-        assertEquals(2, controller.getUsers().size());
+        UserAlreadyExistException exception6 = assertThrows(UserAlreadyExistException.class,
+                () -> controller.createUser(existedIdUser));
+        assertEquals("error, the user already exists", exception6.getMessage());
+        assertEquals(1, controller.getUsers().size());
+    }
 
-        User emptyLoginUser = User.builder()
-                .name("Mike")
-                .email("mike777gyandex@.ru")
-                .login("")
-                .birthday(LocalDate.of(1977, 7, 7))
+    @Test
+    public void createNamelessUser(){
+        User namelessUser = User.builder()
+                .name("")
+                .email("snowbaby357@gyandex.ru")
+                .login("snezhana257")
+                .birthday(LocalDate.of(1989, 7, 7))
                 .build();
-        UserValidationException exception3 = assertThrows(UserValidationException.class,
-                () -> controller.createUser(emptyLoginUser));
-        assertEquals("bad login", exception3.getMessage());
-        assertEquals(2, controller.getUsers().size());
+        controller.createUser(namelessUser);
+        assertEquals(1, controller.getUsers().size());
+        assertEquals("snezhana257", controller.getUsers().get(0).getName());
+    }
 
-        User spacedLoginUser = User.builder()
-                .name("Mike")
-                .email("mike777gyandex@.ru")
-                .login("mike 777")
-                .birthday(LocalDate.of(1977, 7, 7))
-                .build();
-        UserValidationException exception4 = assertThrows(UserValidationException.class,
-                () -> controller.createUser(spacedLoginUser));
-        assertEquals("bad login", exception4.getMessage());
-        assertEquals(2, controller.getUsers().size());
-
+    @Test
+    public void createFutureBirthdayUser(){
         User futureBirthdayUser = User.builder()
                 .name("Mike")
                 .email("mike777gyandex@.ru")
@@ -100,29 +95,63 @@ public class UserControllerTest {
         UserValidationException exception5 = assertThrows(UserValidationException.class,
                 () -> controller.createUser(futureBirthdayUser));
         assertEquals("bad birthday", exception5.getMessage());
-        assertEquals(2, controller.getUsers().size());
+        assertEquals(0, controller.getUsers().size());
+    }
 
-        User namelessUser = User.builder()
-                .name("")
-                .email("snowbaby357@gyandex.ru")
-                .login("snezhana257")
-                .birthday(LocalDate.of(1989, 7, 7))
+    @Test
+    public void createSpacedLoginUser(){
+        User spacedLoginUser = User.builder()
+                .name("Mike")
+                .email("mike777gyandex@.ru")
+                .login("mike 777")
+                .birthday(LocalDate.of(1977, 7, 7))
                 .build();
-        controller.createUser(namelessUser);
-        assertEquals(3, controller.getUsers().size());
-        assertEquals("snezhana257", controller.getUsers().get(2).getName());
+        UserValidationException exception4 = assertThrows(UserValidationException.class,
+                () -> controller.createUser(spacedLoginUser));
+        assertEquals("bad login", exception4.getMessage());
+        assertEquals(0, controller.getUsers().size());
+    }
 
-        User existedIdUser = User.builder()
-                .name("Snezhana")
-                .email("snowbaby357@gyandex.ru")
-                .id(2)
-                .login("snezhana257")
-                .birthday(LocalDate.of(1989, 7, 7))
+    @Test
+    public void createNoEmailUser(){
+        User emptyMailUser = User.builder()
+                .name("Mike")
+                .email("")
+                .login("Mike777")
+                .birthday(LocalDate.of(1977, 7, 7))
                 .build();
-        UserAlreadyExistException exception6 = assertThrows(UserAlreadyExistException.class,
-                () -> controller.createUser(existedIdUser));
-        assertEquals("error, the user already exists", exception6.getMessage());
-        assertEquals(3, controller.getUsers().size());
+        UserValidationException exception = assertThrows(UserValidationException.class,
+                () -> controller.createUser(emptyMailUser));
+        assertEquals("bad email", exception.getMessage());
+        assertEquals(0, controller.getUsers().size());
+    }
+
+    @Test
+    public void createWrongEmailUser(){
+        User wrongMailUser = User.builder()
+                .name("Mike")
+                .email("mike777gyandex.ru")
+                .login("Mike777")
+                .birthday(LocalDate.of(1977, 7, 7))
+                .build();
+        UserValidationException exception2 = assertThrows(UserValidationException.class,
+                () -> controller.createUser(wrongMailUser));
+        assertEquals("bad email", exception2.getMessage());
+        assertEquals(0, controller.getUsers().size());
+    }
+
+    @Test
+    public void createNoLoginUser(){
+        User emptyLoginUser = User.builder()
+                .name("Mike")
+                .email("mike777gyandex@.ru")
+                .login("")
+                .birthday(LocalDate.of(1977, 7, 7))
+                .build();
+        UserValidationException exception3 = assertThrows(UserValidationException.class,
+                () -> controller.createUser(emptyLoginUser));
+        assertEquals("bad login", exception3.getMessage());
+        assertEquals(0, controller.getUsers().size());
     }
 
     @Test
@@ -167,6 +196,22 @@ public class UserControllerTest {
                 () -> controller.updateUser(notExistedUser));
         assertEquals("error, the user doesn't exist", exception.getMessage());
         assertEquals(2, controller.getUsers().size());
+    }
+
+    @Test
+    public void updateNotExistedUser(){
+        User notExistedUser = User.builder()
+                .name("Noone")
+                .email("noonepetrovich@gyandex.ru")
+                .login("astralpetrovich228")
+                .id(28)
+                .birthday(LocalDate.of(1928, 2, 7))
+                .build();
+
+        UserNotExistException exception = assertThrows(UserNotExistException.class,
+                () -> controller.updateUser(notExistedUser));
+        assertEquals("error, the user doesn't exist", exception.getMessage());
+        assertEquals(0, controller.getUsers().size());
     }
 
     @Test
