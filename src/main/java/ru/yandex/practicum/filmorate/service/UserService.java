@@ -29,8 +29,9 @@ public class UserService {
             throw new UserValidationException("same ids was provided");
         }
 
-        User user = getUsers().get(userId);
-        User friend = getUsers().get(friendId);
+        Map<Integer, User> fetchedUsers = getUsers();
+        User user = fetchedUsers.get(userId);
+        User friend = fetchedUsers.get(friendId);
         if (user == null || friend == null) {
             throw new UserNotExistException("user or friend was not found");
         }
@@ -57,8 +58,9 @@ public class UserService {
             throw new UserValidationException("same ids was provided");
         }
 
-        User user = getUsers().get(userId);
-        User friend = getUsers().get(friendId);
+        Map<Integer, User> fetchedUsers = getUsers();
+        User user = fetchedUsers.get(userId);
+        User friend = fetchedUsers.get(friendId);
         if (user == null || friend == null) {
             throw new UserNotExistException("user or friend was not found");
         }
@@ -78,9 +80,9 @@ public class UserService {
             throw new UserValidationException("same ids was provided");
         }
 
-        User user = getUsers().get(userId);
-        User friend = getUsers().get(friendId);
-
+        Map<Integer, User> fetchedUsers = getUsers();
+        User user = fetchedUsers.get(userId);
+        User friend = fetchedUsers.get(friendId);
         if (user == null || friend == null) {
             throw new UserNotExistException("user or friend was not found");
         }
@@ -100,6 +102,7 @@ public class UserService {
         if (userId == null) {
             throw new UserNotExistException("userId can not be null");
         }
+
         User user = getUsers().get(userId);
         if (user == null) {
             throw new UserNotExistException("user was not found");
