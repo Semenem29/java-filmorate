@@ -16,7 +16,8 @@ public class ErrorHandler {
         return new ErrorResponse("validation error", e.getMessage());
     }
 
-    @ExceptionHandler
+    @ExceptionHandler({RatingMPANotExistException.class, FilmNotExistException.class,
+            GenreNotExistException.class, UserNotExistException.class})
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleFilmNotExistException(final NotExistException e) {
         return new ErrorResponse("requested data is not exist");

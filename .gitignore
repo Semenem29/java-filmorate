@@ -3,6 +3,9 @@ target/
 .mvn/wrapper/
 !**/src/main/**/target/
 !**/src/test/**/target/
+checkstyle.xml
+/db/filmorate.mv.db
+/db/filmorate.trace.db
 
 ### STS ###
 .apt_generated
