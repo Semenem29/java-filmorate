@@ -25,11 +25,11 @@ public class FriendDbStorageTest {
     private final FriendStorage storage;
 
     @Test
-    void shouldAddDeleteGetFriend(@Qualifier("userDbStorage") UserStorage userStorage) {
-        User user1 = new User(1, "mur@email.com", "mur",
-                "murka", LocalDate.parse("2005-05-26"), new HashSet<>());
-        User user2 = new User(2, "film@email.com", "film",
-                "Tom", LocalDate.parse("1988-08-17"), new HashSet<>());
+    void shouldAddFriend(@Qualifier("userDbStorage") UserStorage userStorage) {
+        User user1 = new User(1, "zachbraff@scrubs.com", "jd29",
+                "John", LocalDate.of(1975, 4, 6), new HashSet<>());
+        User user2 = new User(2, "donaldfaison@scrubs.com", "chocolatebear69",
+                "Turk", LocalDate.of(1974, 6, 22), new HashSet<>());
         userStorage.create(user1);
         userStorage.create(user2);
         storage.addFriend(user1.getId(), user2.getId());
@@ -40,16 +40,37 @@ public class FriendDbStorageTest {
     }
 
     @Test
-    void shouldGetCommonFriends(@Qualifier("userDbStorage") UserStorage userStorage) {
-        User user1 = new User(1, "mur@email.com", "mur",
-                "murka", LocalDate.parse("2005-05-26"), new HashSet<>());
-        User user2 = new User(2, "film@email.com", "film",
-                "Tom", LocalDate.parse("1988-08-17"), new HashSet<>());
-        User user3 = new User(3, "maria@email.com", "Masha",
-                "Maria", LocalDate.parse("1998-08-17"), new HashSet<>());
+    void shouldDeleteFriend(@Qualifier("userDbStorage") UserStorage userStorage) {
+        User user1 = new User(1, "zachbraff@scrubs.com", "jd29",
+                "John", LocalDate.of(1975, 4, 6), new HashSet<>());
+        User user2 = new User(2, "donaldfaison@scrubs.com", "chocolatebear69",
+                "Turk", LocalDate.of(1974, 6, 22), new HashSet<>());
         userStorage.create(user1);
         userStorage.create(user2);
+        storage.addFriend(user1.getId(), user2.getId());
+        List<User> friends = storage.getFriends(user1.getId());
+        assertEquals(1, friends.size());
+        assertEquals(user2, friends.get(0));
+
+        storage.deleteFriend(user1.getId(), user2.getId());
+        assertEquals(0, storage.getFriends(user1.getId()).size());
+        assertEquals(List.of(), storage.getFriends(user1.getId()));
+    }
+
+    @Test
+    void shouldGetCommonFriends(@Qualifier("userDbStorage") UserStorage userStorage) {
+        User user1 = new User(1, "zachbraff@scrubs.com", "jd29",
+                "John", LocalDate.of(1975, 4, 6), new HashSet<>());
+        userStorage.create(user1);
+
+        User user2 = new User(2, "donaldfaison@scrubs.com", "chocolatebear69",
+                "Turk", LocalDate.of(1974, 6, 22), new HashSet<>());
+        userStorage.create(user2);
+
+        User user3 = new User(3, "sarahchalke@scrubs.com", "flatazz",
+                "Elliot", LocalDate.of(1976, 8, 27), new HashSet<>());
         userStorage.create(user3);
+
         storage.addFriend(user1.getId(), user2.getId());
         storage.addFriend(user1.getId(), user3.getId());
         storage.addFriend(user2.getId(), user3.getId());

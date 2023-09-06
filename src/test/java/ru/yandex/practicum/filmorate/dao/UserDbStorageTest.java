@@ -30,8 +30,8 @@ public class UserDbStorageTest {
     void shouldCreateAndGet() {
         User user1 = new User(1, "john666@gyandex.ru", "John666",
                 "John", LocalDate.of(1966, 6, 6), new HashSet<>());
-        User addedUser = storage.create(user1);
-        assertEquals(user1, addedUser);
+        User storagedUser = storage.create(user1);
+        assertEquals(user1, storagedUser);
 
         User user2 = new User(2, "mike777@gyandex.ru", "Mike777",
                 "Mike", LocalDate.of(1977, 7, 7), new HashSet<>());
