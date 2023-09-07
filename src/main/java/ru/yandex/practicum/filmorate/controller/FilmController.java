@@ -9,8 +9,6 @@ import ru.yandex.practicum.filmorate.service.FilmService;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-
 
 @RestController
 @Slf4j
@@ -26,32 +24,32 @@ public class FilmController {
 
     @GetMapping
     public List<Film> getFilmStorage() {
-        return new ArrayList<>(filmService.getFilmStorage().values());
+        return new ArrayList<>(filmService.getFilms());
     }
 
     @PostMapping
     public Film addFilm(@RequestBody Film film) {
-        return filmService.createFilm(film);
+        return filmService.create(film);
     }
 
     @PutMapping
     public Film updateFilm(@RequestBody Film film) {
-        return filmService.updateFilm(film);
+        return filmService.update(film);
     }
 
     @PutMapping("/{id}/like/{userId}")
-    public Set<Integer> addLike(@PathVariable Integer id, @PathVariable Integer userId) {
-        return filmService.addLike(id, userId);
+    public void addLike(@PathVariable Integer id, @PathVariable Integer userId) {
+        filmService.addLike(id, userId);
     }
 
     @DeleteMapping("/{id}/like/{userId}")
-    public Set<Integer> removeLike(@PathVariable Integer id, @PathVariable Integer userId) {
-        return filmService.removeLike(id, userId);
+    public void removeLike(@PathVariable Integer id, @PathVariable Integer userId) {
+        filmService.removeLike(id, userId);
     }
 
     @GetMapping("/{id}")
     public Film getFilm(@PathVariable(required = false) Integer id) {
-        return filmService.getFilm(id);
+        return filmService.getFilmById(id);
     }
 
     @GetMapping("/popular")

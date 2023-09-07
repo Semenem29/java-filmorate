@@ -1,143 +1,67 @@
 package ru.yandex.practicum.filmorate.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.exception.UserNotExistException;
-import ru.yandex.practicum.filmorate.exception.UserValidationException;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.storage.Storage;
+import ru.yandex.practicum.filmorate.storage.friend.FriendStorage;
+import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
 import java.util.*;
-import java.util.stream.Collectors;
+
+import static ru.yandex.practicum.filmorate.service.validator.UserValidator.validate;
 
 @Service
 public class UserService {
 
-    private Storage<User> userStorage;
+    private UserStorage userStorage;
+
+    private FriendStorage friendStorage;
 
     @Autowired
-    public UserService(Storage<User> userStorage) {
+    public UserService(@Qualifier("userDbStorage") UserStorage userStorage, FriendStorage friendStorage) {
         this.userStorage = userStorage;
+        this.friendStorage = friendStorage;
     }
 
-    public Set<Integer> addFriend(Integer userId, Integer friendId) {
-        if (userId == null || friendId == null) {
-            throw new UserValidationException("friendId and/or userId cannot be null");
-        }
-
-        if (userId.equals(friendId)) {
-            throw new UserValidationException("same ids was provided");
-        }
-
-        Map<Integer, User> fetchedUsers = getUsers();
-        User user = fetchedUsers.get(userId);
-        User friend = fetchedUsers.get(friendId);
-        if (user == null || friend == null) {
-            throw new UserNotExistException("user or friend was not found");
-        }
-
-        if (user.getFriends() == null) {
-            user.setFriends(new HashSet<>());
-        }
-        if (friend.getFriends() == null) {
-            friend.setFriends(new HashSet<>());
-        }
-
-        user.getFriends().add(friendId);
-        friend.getFriends().add(userId);
-
-        return user.getFriends();
+    public void addFriend(Integer id, Integer friendId) {
+        getUserById(id);
+        getUserById(friendId);
+        friendStorage.addFriend(id, friendId);
     }
 
-    public Set<Integer> removeFriend(Integer userId, Integer friendId) {
-        if (userId == null || friendId == null) {
-            throw new UserValidationException("friendId and/or userId cannot be null");
-        }
-
-        if (userId.equals(friendId)) {
-            throw new UserValidationException("same ids was provided");
-        }
-
-        Map<Integer, User> fetchedUsers = getUsers();
-        User user = fetchedUsers.get(userId);
-        User friend = fetchedUsers.get(friendId);
-        if (user == null || friend == null) {
-            throw new UserNotExistException("user or friend was not found");
-        }
-
-        user.getFriends().remove(friendId);
-        friend.getFriends().remove(userId);
-
-        return user.getFriends();
+    public void removeFriend(Integer id, Integer friendId) {
+        getUserById(id);
+        getUserById(friendId);
+        friendStorage.deleteFriend(id, friendId);
     }
 
-    public Set<User> getCommonFriends(Integer userId, Integer friendId) {
-        if (userId == null || friendId == null) {
-            throw new UserValidationException("friendId and/or userId cannot be null");
-        }
-
-        if (userId.equals(friendId)) {
-            throw new UserValidationException("same ids was provided");
-        }
-
-        Map<Integer, User> fetchedUsers = getUsers();
-        User user = fetchedUsers.get(userId);
-        User friend = fetchedUsers.get(friendId);
-        if (user == null || friend == null) {
-            throw new UserNotExistException("user or friend was not found");
-        }
-
-        if (user.getFriends() == null) {
-            return new HashSet<>();
-        } else {
-            return user.getFriends().stream()
-                    .filter(id -> friend.getFriends().contains(id))
-                    .map(id -> getUsers().get(id))
-                    .collect(Collectors.toSet());
-        }
-
+    public User getUserById(Integer id) {
+        return userStorage.getUserById(id);
     }
 
-    public List<User> getFriends(Integer userId) {
-        if (userId == null) {
-            throw new UserNotExistException("userId can not be null");
-        }
-
-        User user = getUsers().get(userId);
-        if (user == null) {
-            throw new UserNotExistException("user was not found");
-        }
-
-        if (user.getFriends() == null) {
-            user.setFriends(new HashSet<>());
-        }
-
-        return user.getFriends().stream()
-                .map(id -> getUsers().get(id))
-                .collect(Collectors.toList());
+    public List<User> getCommonFriends(Integer id, Integer friendId) {
+        getUserById(id);
+        getUserById(friendId);
+        return friendStorage.getCommonFriends(id, friendId);
     }
 
-    public User getUser(Integer userId) {
-        if (userId == null) {
-            throw new UserNotExistException("userId can not be null");
-        }
-        if (userId <= 0 || getUsers().containsKey(userId)) {
-            return getUsers().get(userId);
-        } else {
-            throw new UserNotExistException("user is not exist");
-        }
-
+    public List<User> getFriends(Integer id) {
+        getUserById(id);
+        return friendStorage.getFriends(id);
     }
 
-    public Map<Integer, User> getUsers() {
+    public List<User> getUsers() {
         return userStorage.getStorage();
     }
 
     public User create(User user) {
+        validate(user);
         return userStorage.create(user);
     }
 
     public User update(User user) {
+        validate(user);
         return userStorage.update(user);
     }
 }

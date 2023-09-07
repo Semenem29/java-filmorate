@@ -1,13 +1,14 @@
 package ru.yandex.practicum.filmorate.model;
 
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 @Data
-@Builder
+@AllArgsConstructor
 public class Film {
     private Integer id;
     private String name;
@@ -16,6 +17,8 @@ public class Film {
     private int duration;
     private Set<Integer> fans;
     private Integer rate;
+    private RatingMPA mpa;
+    private List<Genre> genres;
 
     public static int compare(Film f1, Film f2) {
         if (f2.getRate() != null) {

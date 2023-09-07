@@ -45,7 +45,7 @@ public class InMemoryUserStorage implements Storage<User> {
         }
 
         userStorage.put(user.getId(), user);
-        String message = String.format("Добавлен новый юзер, количество пользователей: %s", userStorage.size());
+        String message = String.format("Добавлен новый пользователь, количество пользователей: %s", userStorage.size());
         log.info(message);
         return user;
     }

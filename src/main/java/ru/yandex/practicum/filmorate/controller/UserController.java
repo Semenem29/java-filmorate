@@ -22,12 +22,12 @@ public class UserController {
 
     @GetMapping
     public List<User> getUsers() {
-        return new ArrayList<>(userService.getUsers().values());
+        return userService.getUsers();
     }
 
     @GetMapping("/{id}")
     public User getUser(@PathVariable Integer id) {
-        return userService.getUser(id);
+        return userService.getUserById(id);
     }
 
     @PostMapping
@@ -46,18 +46,18 @@ public class UserController {
     }
 
     @GetMapping("/{id}/friends/common/{otherId}")
-    public Set<User> getCommonFriends(@PathVariable Integer id, @PathVariable Integer otherId) {
+    public List<User> getCommonFriends(@PathVariable Integer id, @PathVariable Integer otherId) {
         return userService.getCommonFriends(id, otherId);
     }
 
     @PutMapping("/{id}/friends/{friendId}")
-    public Set<Integer> addFriend(@PathVariable Integer id, @PathVariable Integer friendId) {
-        return userService.addFriend(id, friendId);
+    public void addFriend(@PathVariable Integer id, @PathVariable Integer friendId) {
+        userService.addFriend(id, friendId);
     }
 
     @DeleteMapping("/{id}/friends/{friendId}")
-    public Set<Integer> removeFriend(@PathVariable Integer id, @PathVariable Integer friendId) {
-        return userService.removeFriend(id, friendId);
+    public void removeFriend(@PathVariable Integer id, @PathVariable Integer friendId) {
+        userService.removeFriend(id, friendId);
     }
 
 }
