@@ -53,18 +53,22 @@ public class FilmDbStorage implements FilmStorage {
             log.info("{} was updated", film);
             return film;
         } else {
-            throw new FilmNotExistException(String.format("Film wasn't found with id=%d", filmId));
+            String message = String.format("Film with id=%d wasn't found", filmId);
+            log.error(message);
+            throw new FilmNotExistException(message);
         }
     }
 
     @Override
-    public Film getFilmById(int id) {
+    public Film getFilmById(int filmId) {
         try {
             String sqlQuery = "select f.*, rating.name as mpa_name from film as f " +
                     "left join rating on f.rating_id = rating.RATING_ID where f.FILM_ID = ?";
-            return jdbcTemplate.queryForObject(sqlQuery, FilmorateMapper::filmFromRow, id);
+            return jdbcTemplate.queryForObject(sqlQuery, FilmorateMapper::filmFromRow, filmId);
         } catch (EmptyResultDataAccessException e) {
-            throw new FilmNotExistException(String.format("Film wasn't found with id=%d", id));
+            String message = String.format("Film with id=%d wasn't found", filmId);
+            log.error(message);
+            throw new FilmNotExistException(message);
         }
     }
 

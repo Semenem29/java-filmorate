@@ -20,61 +20,6 @@ public class Film {
     private RatingMPA mpa;
     private List<Genre> genres;
 
-    public Film() {
-    }
-
-    public Film(String name, String description, LocalDate releaseDate, int duration, RatingMPA mpa) {
-        this.name = name;
-        this.description = description;
-        this.releaseDate = releaseDate;
-        this.duration = duration;
-        this.mpa = mpa;
-    }
-
-    public Film(Integer id, String name, String description, LocalDate releaseDate, int duration,
-                Integer rate, RatingMPA mpa, List<Genre> genres) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.releaseDate = releaseDate;
-        this.duration = duration;
-        this.rate = rate;
-        this.mpa = mpa;
-        this.genres = genres;
-    }
-
-    public Film(String name, String description, LocalDate releaseDate, int duration,
-                Set<Integer> fans, RatingMPA mpa, List<Genre> genres) {
-        this.name = name;
-        this.description = description;
-        this.releaseDate = releaseDate;
-        this.duration = duration;
-        this.fans = fans;
-        this.mpa = mpa;
-        this.genres = genres;
-    }
-
-    public Film(String name, String description, LocalDate releaseDate, int duration,
-                Set<Integer> fans, Integer rate, RatingMPA mpa, List<Genre> genres) {
-        this.name = name;
-        this.description = description;
-        this.releaseDate = releaseDate;
-        this.duration = duration;
-        this.fans = fans;
-        this.rate = rate;
-        this.mpa = mpa;
-        this.genres = genres;
-    }
-
-    public Film(Integer id, String name, String description, LocalDate releaseDate, int duration, RatingMPA mpa) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.releaseDate = releaseDate;
-        this.duration = duration;
-        this.mpa = mpa;
-    }
-
     public static int compare(Film f1, Film f2) {
         if (f2.getRate() != null) {
             if (f1.getRate() != null) {

@@ -35,14 +35,14 @@ public class FilmDbStorageTest {
 
     @Test
     void shouldCreate() {
-        Film film1 = new Film("Die Hard",
+        Film film1 = new Film(null, "Die Hard",
                 "40 Storeys High - with Suspense, Excitement and Adventure on every level!",
                 LocalDate.of(1988, 1, 1), 133, new HashSet<>(),
                 0, new RatingMPA(1, "G"), new ArrayList<>());
         Film storagedFilm = filmStorage.create(film1);
         assertEquals(film1, storagedFilm);
 
-        Film film2 = new Film("Die Hard 2",
+        Film film2 = new Film(null, "Die Hard 2",
                 "40 Storeys High - with Suspense, Excitement and Adventure on every level! Again!",
                 LocalDate.of(1990, 1, 1), 133, new HashSet<>(),
                 0, new RatingMPA(2, "PG"), new ArrayList<>());
@@ -56,12 +56,12 @@ public class FilmDbStorageTest {
 
     @Test
     void shouldUpdate() {
-        Film film = new Film("Die Hard",
+        Film film = new Film(null, "Die Hard",
                 "40 Storeys High - with Suspense, Excitement and Adventure on every level!",
                 LocalDate.of(1988, 1, 1), 133, new HashSet<>(),
                 0, new RatingMPA(1, "G"), new ArrayList<>());
         filmStorage.create(film);
-        Film newFilm = new Film("Die Hard 2",
+        Film newFilm = new Film(null, "Die Hard 2",
                 "40 Storeys High - with Suspense, Excitement and Adventure on every level! Again!",
                 LocalDate.of(1990, 1, 1), 133, new HashSet<>(),
                 0, new RatingMPA(2, "PG"), new ArrayList<>());
@@ -77,7 +77,7 @@ public class FilmDbStorageTest {
         FilmNotExistException e = Assertions.assertThrows(
                 FilmNotExistException.class,
                 () -> {
-                    Film film = new Film("Die Hard",
+                    Film film = new Film(null, "Die Hard",
                             "40 Storeys High - with Suspense, Excitement and Adventure on every level!",
                             LocalDate.of(1988, 1, 1), 133, new HashSet<>(),
                             0, new RatingMPA(1, "G"), new ArrayList<>());
@@ -86,12 +86,12 @@ public class FilmDbStorageTest {
                 }
         );
 
-        assertEquals("Film wasn't found with id=9999", e.getMessage());
+        assertEquals("Film with id=9999 wasn't found", e.getMessage());
     }
 
     @Test
     void shouldGetFilmById() {
-        Film film = new Film("Die Hard",
+        Film film = new Film(null, "Die Hard",
                 "40 Storeys High - with Suspense, Excitement and Adventure on every level!",
                 LocalDate.of(1988, 1, 1), 133, new HashSet<>(),
                 0, new RatingMPA(1, "G"), new ArrayList<>());
@@ -108,17 +108,17 @@ public class FilmDbStorageTest {
                 () -> filmStorage.getFilmById(9999)
         );
 
-        assertEquals("Film wasn't found with id=9999", e.getMessage());
+        assertEquals("Film with id=9999 wasn't found", e.getMessage());
     }
 
     @Test
     void shouldGetTopTenFilms(@Autowired LikeStorage likeStorage) {
-        Film film1 = new Film("Die Hard",
+        Film film1 = new Film(null, "Die Hard",
                 "40 Storeys High - with Suspense, Excitement and Adventure on every level!",
                 LocalDate.of(1988, 1, 1), 133, new HashSet<>(),
                 0, new RatingMPA(1, "G"), new ArrayList<>());
         filmStorage.create(film1);
-        Film film2 = new Film("Die Hard 2",
+        Film film2 = new Film(null, "Die Hard 2",
                 "40 Storeys High - with Suspense, Excitement and Adventure on every level! Again!",
                 LocalDate.of(1990, 1, 1), 133, new HashSet<>(),
                 0, new RatingMPA(2, "PG"), new ArrayList<>());

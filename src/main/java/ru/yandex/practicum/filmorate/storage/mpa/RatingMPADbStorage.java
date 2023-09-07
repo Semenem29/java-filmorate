@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.storage.mpa;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -10,6 +11,7 @@ import ru.yandex.practicum.filmorate.util.FilmorateMapper;
 
 import java.util.List;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class RatingMPADbStorage implements RatingMPAStorage {
@@ -29,7 +31,9 @@ public class RatingMPADbStorage implements RatingMPAStorage {
             String sqlQuery = "select * from rating where RATING_ID = ?";
             return jdbcTemplate.queryForObject(sqlQuery, FilmorateMapper::ratingMPAFromRow, id);
         } catch (EmptyResultDataAccessException e) {
-            throw new RatingMPANotExistException(String.format("MPA with id=%d wasn't found", id));
+            String message = String.format("MPA with id=%d wasn't found", id);
+            log.error(message);
+            throw new RatingMPANotExistException(message);
         }
     }
 

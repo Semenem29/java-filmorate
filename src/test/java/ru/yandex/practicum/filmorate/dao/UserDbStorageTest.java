@@ -66,7 +66,7 @@ public class UserDbStorageTest {
                 }
         );
 
-        assertEquals("User was not found with id=777", e.getMessage());
+        assertEquals("User with id=777 was not found", e.getMessage());
     }
 
     @Test
@@ -86,6 +86,6 @@ public class UserDbStorageTest {
                 () -> storage.getUserById(777)
         );
 
-        assertEquals("User was not found with id=777", e.getMessage());
+        assertEquals("User with id=777 was not found", e.getMessage());
     }
 }

@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.storage.genre;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -13,6 +14,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class GenreDbStorage implements GenreStorage {
@@ -34,7 +36,9 @@ public class GenreDbStorage implements GenreStorage {
                     id
             );
         } catch (EmptyResultDataAccessException e) {
-            throw new GenreNotExistException(String.format("Genre was not found with id=%d", id));
+            String message = String.format("Genre was not found with id=%d", id);
+            log.error(message);
+            throw new GenreNotExistException(message);
         }
     }
 
@@ -68,5 +72,6 @@ public class GenreDbStorage implements GenreStorage {
     public void deleteFilmGenres(int filmId) {
         String sqlQuery = "delete from film_genre where film_id = ?";
         jdbcTemplate.update(sqlQuery, filmId);
+        log.info("Genres info of film with id={} was cleared", filmId);
     }
 }

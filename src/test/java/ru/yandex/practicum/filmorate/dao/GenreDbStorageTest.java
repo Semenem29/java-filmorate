@@ -16,6 +16,8 @@ import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.genre.GenreStorage;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -76,9 +78,10 @@ public class GenreDbStorageTest {
 
     @Test
     void shouldAddDeleteFilmGenres(@Qualifier("filmDbStorage") FilmStorage filmStorage) {
-        Film film = new Film("Die Hard",
+        Film film = new Film(null, "Die Hard",
                 "40 Storeys High - with Suspense, Excitement and Adventure on every level!",
-                LocalDate.of(1988, 1, 1), 133, new RatingMPA(1, "G"));
+                LocalDate.of(1988, 1, 1), 133, new HashSet<>(),
+                0, new RatingMPA(1, "G"), null);
         film.setGenres(List.of(
                 new Genre(1, null),
                 new Genre(4, null),

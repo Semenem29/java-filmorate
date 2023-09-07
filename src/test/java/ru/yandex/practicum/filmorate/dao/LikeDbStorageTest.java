@@ -15,6 +15,7 @@ import ru.yandex.practicum.filmorate.storage.like.LikeStorage;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
@@ -31,9 +32,10 @@ public class LikeDbStorageTest {
     @Test
     void shouldAddLikes(@Qualifier("userDbStorage") UserStorage userStorage,
                         @Qualifier("filmDbStorage") FilmStorage filmStorage) {
-        Film film = new Film("Die Hard",
+        Film film = new Film(null, "Die Hard",
                 "40 Storeys High - with Suspense, Excitement and Adventure on every level!",
-                LocalDate.of(1988, 1, 1), 133, new RatingMPA(1, "G"));
+                LocalDate.of(1988, 1, 1), 133, new HashSet<>(),
+                null, new RatingMPA(1, "G"), new ArrayList<>());
         filmStorage.create(film);
         User user = new User(1, "zachbraff@scrubs.com", "jd29",
                 "John", LocalDate.of(1975, 4, 6), new HashSet<>());
@@ -51,9 +53,10 @@ public class LikeDbStorageTest {
     @Test
     void shouldDeleteLikes(@Qualifier("userDbStorage") UserStorage userStorage,
                            @Qualifier("filmDbStorage") FilmStorage filmStorage) {
-        Film film = new Film("Die Hard",
+        Film film = new Film(null, "Die Hard",
                 "40 Storeys High - with Suspense, Excitement and Adventure on every level!",
-                LocalDate.of(1988, 1, 1), 133, new RatingMPA(1, "G"));
+                LocalDate.of(1988, 1, 1), 133, new HashSet<>(),
+                null, new RatingMPA(1, "G"), new ArrayList<>());
         filmStorage.create(film);
         User user = new User(1, "zachbraff@scrubs.com", "jd29",
                 "John", LocalDate.of(1975, 4, 6), new HashSet<>());

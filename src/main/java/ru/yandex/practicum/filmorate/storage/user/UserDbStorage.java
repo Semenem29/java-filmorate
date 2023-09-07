@@ -50,17 +50,21 @@ public class UserDbStorage implements UserStorage {
             log.info("{} was updated", user);
             return user;
         } else {
-            throw new UserNotExistException(String.format("User was not found with id=%d", userId));
+            String message = String.format("User with id=%d was not found", userId);
+            log.error(message);
+            throw new UserNotExistException(message);
         }
     }
 
     @Override
-    public User getUserById(int id) {
+    public User getUserById(int userId) {
         try {
             return jdbcTemplate.queryForObject("select * from users where user_id = ?",
-                    FilmorateMapper::userFromRow, id);
+                    FilmorateMapper::userFromRow, userId);
         } catch (EmptyResultDataAccessException e) {
-            throw new UserNotExistException(String.format("User was not found with id=%d", id));
+            String message = String.format("User with id=%d was not found", userId);
+            log.error(message);
+            throw new UserNotExistException(message);
         }
     }
 }
